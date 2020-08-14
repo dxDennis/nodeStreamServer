@@ -23,3 +23,9 @@ thats it you should see a message from the server.
 
 type <code>quit</code> and telnet is out of connection.
 Server will still be running!
+
+**********************
+
+History
+- Version 1.0.0 - INIT Version
+- Version 1.0.1 - some tiny improvements

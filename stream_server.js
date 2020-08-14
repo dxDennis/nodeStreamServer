@@ -4,48 +4,54 @@ const net = require('net'),
     port = 3000,
     _NLCode = 13;
 
-let _connected = false, uuid;
+let _connected = false, uuid, _socket;
 
 const server = net.createServer((socket) => {
+    _socket = socket;
     _connected = true;
     uuid = uuidv4();
-    console.log('new connection', uuid);
-    socket.write("MisterVac Chat-Server\r\n");
+    _socket.write("Welcome to my new chat-server\r\n");
 
     let textLine = '';
-    socket.on('data', function (data) {
+    _socket.on('data', function (data) {
         if (_connected === true) {
             let txtInput = data.toString('utf8');
             textLine += txtInput;
 
             if (_NLCode === txtInput.charCodeAt(0)) {
-                inputHandler(textLine, this, server);
+                inputHandler(textLine);
                 textLine = '';
             }
         }
-
     });
 
 });
 
-const inputHandler = function (textLine, socket) {
+const answer = function (answerMsg) {
+    _socket.write(answerMsg + "\n\r");
+    console.info("server:\t<\t" + answerMsg);
+}
+const inputHandler = function (textLine) {
     if (_connected) {
         textLine = textLine.replace("\n", "").replace("\r", "");
-        socket.write("you wrote:" + textLine + "\n\r");
+        console.info("client:\t>\t" + textLine);
+
         switch (textLine) {
             default:
-                socket.write("Im not sure what you mean with: '" + textLine + "' ...\n\r");
+                answer("Im not sure what you mean with: '" + textLine + "'!");
+                break;
+            case '':
+                answer("is this all you have to say?");
                 break;
             case 'quit':
-                socket.write("closing server ..." + textLine + "\n\r");
-                console.log('connection closed!', uuid);
+                answer("closing server ...");
                 _connected = uuid = false;
-                socket.end();
+                _socket.end();
                 break;
         }
     }
 };
 
 server.listen(port, hostname, () => {
-    console.log(`TCP-Server running at http://${hostname}:${port}/`);
+    console.info(`Chat-Server running at http://${hostname}:${port}/` + "\n\r*********************************\n\r");
 });
