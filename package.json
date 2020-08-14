@@ -1,0 +1,16 @@
+{
+  "name": "node_hello_world",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "streamserver": "node ./stream_server.js",
+    "httpserver": "node ./app.js"
+  },
+  "author": "Dennis Decker",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "uuid": "^8.3.0"
+  }
+}
